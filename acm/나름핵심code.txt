@@ -1,0 +1,236 @@
+#include<stdio.h>
+#include<algorithm>
+#include<iostream>
+#include<set>
+using namespace std;
+int T, n;
+int main() {
+	char c;
+	int num;
+	for (scanf("%d", &T); T--;) {
+		multiset<int> ms;
+		for (scanf("%d", &n); n--;) {
+			scanf(" %c%d", &c, &num);
+			if (c == 'I') ms.insert(num);
+			else if (!ms.empty()) num < 0 ? ms.erase(ms.begin()) : ms.erase(--ms.end());
+
+		}
+		if (!ms.empty()) printf("%d %d", *ms.rbegin(),*ms.begin());
+		else printf("EMPTY");
+		printf("\n");
+	}
+	return 0;
+}
+
+// 토마토
+#include<stdio.h>
+#include<vector>
+using namespace std;
+typedef pair<int, int> ii;
+vector<ii> v;
+vector<ii> chk;
+int N, M;
+int A[1002][1002];
+int dx[4] = { 1,-1,0,0 };
+int dy[4] = { 0,0,1,-1 };
+int day, total;
+int mx;
+void solve(void);
+int main() {
+	scanf("%d%d", &N, &M);
+	for (int i = 0; i <= N + 1; i++)
+		A[0][i] = 1;
+	for (int i = 0; i <= N + 1; i++)
+		A[M + 1][i] = 1;
+	for (int i = 0; i <= M + 1; i++)
+		A[i][0] = 1;
+	for (int i = 0; i <= M + 1; i++)
+		A[i][N + 1] = 1;
+	for (int i = 1; i <= M; i++) {
+		for (int j = 1; j <= N; j++) {
+			scanf("%d", &A[i][j]);
+		}
+	}
+	mx = M*N;
+	for (int i = 1; i <= M; i++) {
+		for (int j = 1; j <= N; j++) {
+			if (A[i][j] == 1) {
+				v.push_back(ii(i, j));
+				total++;
+			}
+			else if (A[i][j] == -1)
+				mx--;
+		}
+	}
+	while (!v.empty()) {
+			solve();
+		}
+	if (mx == total)
+		printf("%d", day-1);
+	else
+		printf("-1");
+	return 0;
+}
+void solve(void) {
+	while (!v.empty()) {
+		chk.push_back(v.back());
+		v.pop_back();
+	}
+	day++;
+	while (!chk.empty()) {
+		ii ni = chk.back();
+		chk.pop_back();
+		int nx, ny;
+		for (int i = 0; i < 4; i++) {
+			nx = ni.first + dx[i];
+			ny = ni.second + dy[i];
+			if (A[nx][ny]==0) {
+				A[nx][ny]=1;
+				v.push_back(ii(nx, ny));
+				total++;
+			}
+		}
+	}
+}
+
+// dfs
+
+#include<stdio.h>
+int dx[] = { 1,-1,0,0 };
+int dy[] = { 0,0, 1,-1 };
+int A[50][50] = { 0 };
+int C[50][50] = { 0 };
+int cnt;int a, b, c;
+void dfs(int x, int y);
+int main() {
+	int n;
+	scanf("%d", &n);
+	while (n--) {
+		scanf("%d%d%d", &a, &b, &c);
+		while (c--) {
+			int d, e;
+			scanf("%d%d", &d, &e);
+			A[e][d] = 1;
+		}
+		for (int i = 0; i < b; i++) {
+			for (int j = 0; j < a; j++) {
+				if (!C[i][j] && A[i][j]) {
+					cnt++;
+					dfs(i, j);
+				}
+			}
+		}
+		printf("%d\n", cnt);
+		cnt = 0;
+		for (int i = 0; i < b; i++) {
+			for (int j = 0; j < a; j++) {
+				A[i][j] = 0;
+				C[i][j] = 0;
+			}
+		}
+	}
+	return 0;
+}
+void dfs(int x, int y) {
+	C[x][y] = 1;
+	int nx, ny;
+	for (int i = 0; i < 4; i++) {
+		nx = x + dx[i];
+		ny = y + dy[i];
+		if (nx < b &&nx>=0 && ny < a&&ny>=0) {
+			if (!C[nx][ny] && A[nx][ny])
+				dfs(nx,ny);
+		}
+		}
+}
+
+// longlong sum
+#include<stdio.h>
+#include<vector>
+#include<algorithm>
+#include<iostream>
+
+using namespace std;
+int N;
+long long S[111111];
+int A[111111];
+int main() {
+	int a;
+	long long sum = 0;
+	scanf("%d", &N);
+	scanf("%d", &A[0]);
+	S[0] = A[0];
+	for (int i = 1; i < N; i++) {
+		scanf("%d", &a);
+		A[i] = a;
+		S[i] += S[i-1]+a;		
+	}
+
+	for (int i = N - 1; i > 0; i--) {
+		sum += A[i] * S[i - 1];
+	}
+
+	printf("%lld", sum);
+	return 0;
+}
+
+//
+
+
+합을 넣고,
+그 합이 최대가 되는 수를 찾아야 하는데,
+// 직사각형 집합
+
+#include <cstdio>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int n;
+vector<pair<int,int> > v;
+ 
+int gcd(int a, int b)
+{
+    return b?gcd(b,a%b):a;
+}
+long long calc(int i)
+{
+    return (v[i].first+v[i].second)<<1;
+}
+ 
+bool cmp(pair<int, int> a, pair<int, int> b)
+{
+    return a.first+a.second<b.first+b.second;
+}
+int main()
+{
+    for(int i=1;;++i){
+        if(2*i*(i+1) + (i+1)*(i+1)-i*i > 500000)break;
+        for(int j=i+1;;++j){
+            int a = 2*i*j;
+            int b = j*j-i*i;
+            if(a+b > 500000)break;
+            if(a>b)swap(a,b);
+            int g = gcd(a,b);
+            a/=g;
+            b/=g;
+            v.push_back(make_pair(a,b));
+        }
+    }
+    sort(v.begin(),v.end());
+    v.erase(unique(v.begin(),v.end()),v.end());
+    sort(v.begin(),v.end(),cmp);
+    int sum = 0;
+    int t;
+    for(scanf("%d",&t);t;--t){
+        int k;
+        scanf("%d",&k);
+        int sum = 0;
+        int ans = 0;
+        for(ans=0;sum+calc(ans)<=k;++ans){
+            sum+=calc(ans);
+        }
+        printf("%d
+",ans);
+ 
+    }
+}

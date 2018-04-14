@@ -1,0 +1,12 @@
+vector / deque  (front, back) pop_front
+
+vector.begin() <- iterator
+vector.end() <- iterator
+vector.size()
+
+vector.front();
+vector.back();
+vector.clear();
+
+vector.push_back
+vector.pop_back
